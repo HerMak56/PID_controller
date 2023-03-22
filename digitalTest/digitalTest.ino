@@ -39,7 +39,7 @@ void setup() {
   pinMode(6,OUTPUT);
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(Inter1),FlagInterrupt,CHANGE);
-  Serial.setTimeout(20);
+  Serial.setTimeout(5);
   digitalWrite(5,LOW);
   digitalWrite(6,HIGH);
   analogWrite(9,0);
