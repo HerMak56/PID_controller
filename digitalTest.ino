@@ -49,27 +49,6 @@ void FlagInterrupt()
 {
   Flag = true;
 }
-//
-void counter()
-{
-  if(Flag)
-  {
-    Flag = false;
-    stat1 = digitalRead(2);
-     stat2 = digitalRead(3);
-    if(stat1 == stat2)
-    {
-      count++;
-      Serial.println(count);
-    }
-   else
-   {
-      count--;
-      Serial.println(count);
-   }
-  }
-}
-
 void Send2Driver(float V)
 {
   int NewV = int(255*abs(V) / 12);
@@ -153,8 +132,4 @@ float simpleKalman(float newVal) {
 void loop() {
     StatsFlag();
     calculateRotSpeed();
-//    VelocityPID(50);
-//    Serial.print(Velocity);
-//    Serial.print(',');
-//    Serial.println(50);
 }
