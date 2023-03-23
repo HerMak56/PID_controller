@@ -27,6 +27,8 @@ class Motor
         bool StateFirstEncoder;
         bool StateSecondEncoder;
 
+        float RecognitionTime;
+
         //Val for PID
         double error = 0;
         double integral = 0;
@@ -44,9 +46,9 @@ class Motor
 
         void FlagInterrupt();
         void Send2Driver(float V);
-        void StatsFlag();
+        void tick();
         void calculateRotSpeed();
-        void VelocityPID(double GoalVelocity, double Velocity);
+        void VelocityPID(float GoalVelocity, float Velocity);
         float simpleKalman(float newVal);
 
         public:

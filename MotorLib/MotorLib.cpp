@@ -8,6 +8,8 @@ void Motor::init(int _FirstEncoder,int _SecondEncoder, int _PWMOut, int _RotOut1
     FirstEncoder = _FirstEncoder;
     SecondEncoder = _SecondEncoder;
 
+    RecognitionTime = 20;
+
     PWMOut = _PWMOut;
 
     RotOut1 = _RotOut1;
@@ -42,6 +44,7 @@ void Motor::init(int _FirstEncoder,int _SecondEncoder, int _PWMOut, int _RotOut1
     pinMode(SecondEncoder,INPUT_PULLUP);
     digitalWrite(RotOut1,LOW);
     digitalWrite(RotOut2,LOW);
+    //attachInterrupt(digitalPinToInterrupt(FirstEncoder),FlagInterrupt,CHANGE);
 }
 float Motor::GetRealVelocity()
 {
@@ -50,6 +53,10 @@ float Motor::GetRealVelocity()
 void Motor::SetVolocity(float _GoalVelocity)
 {
     GoalVelocity = _GoalVelocity;
+}
+void Motor::FlagInterrupt()
+{
+    FlagInterrapt = true;
 }
 void Motor::tick()
 {
@@ -64,4 +71,55 @@ void Motor::tick()
         FlagInterrapt = false;
     }
     calculateRotSpeed();
+}
+void Motor::calculateRotSpeed()
+{
+    if(millis() - Timer >= RecognitionTime)
+    {
+        delta = count - count_prev;
+        count_prev = count;
+        float Velocity_temp = delta * 1000 / RecognitionTime * 0.0285;
+        Velocity = simpleKalman(Velocity_temp);
+        VelocityPID(GoalVelocity,Velocity);
+    }
+}
+float Motor::simpleKalman(float newVal) {
+  float _kalman_gain, _current_estimate;
+  static float _err_estimate = _err_measure;
+  static float _last_estimate;
+  _kalman_gain = (float)_err_estimate / (_err_estimate + _err_measure);
+  _current_estimate = _last_estimate + (float)_kalman_gain * (newVal - _last_estimate);
+  _err_estimate =  (1.0 - _kalman_gain) * _err_estimate + fabs(_last_estimate - _current_estimate) * _q;
+  _last_estimate = _current_estimate;
+  return _current_estimate;
+}
+void Motor::VelocityPID(float GoalVelocity, float Velocity)
+{
+    error = GoalVelocity - Velocity;
+    integral = integral + error * RecognitionTime / 1000 *ki;
+    D = error * 1000 / RecognitionTime;
+    out = error*kp + integral + D*kd;
+}
+void Motor::Send2Driver(float V)
+{
+    int NewV = int(255 * abs(V) / 12);
+    if (NewV > 255)
+    NewV = 255;
+
+    if (V > 0 )
+    {
+        digitalWrite(5, LOW);
+        digitalWrite(6, HIGH);
+    }
+    else if (V < 0)
+    {
+        digitalWrite(5, HIGH);
+        digitalWrite(6, LOW);
+    }
+    else
+    {
+        digitalWrite(5, LOW);
+        digitalWrite(6, LOW);
+    }
+  analogWrite(PWMOut, NewV);
 }
