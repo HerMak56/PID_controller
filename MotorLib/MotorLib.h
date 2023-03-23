@@ -45,7 +45,6 @@ class Motor
 
 
         void Send2Driver(float V);
-        void tick();
         void calculateRotSpeed();
         void VelocityPID(float GoalVelocity, float Velocity);
         float simpleKalman(float newVal);
