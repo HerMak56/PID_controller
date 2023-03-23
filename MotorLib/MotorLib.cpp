@@ -99,6 +99,7 @@ void Motor::VelocityPID(float GoalVelocity, float Velocity)
     integral = integral + error * RecognitionTime / 1000 *ki;
     D = error * 1000 / RecognitionTime;
     out = error*kp + integral + D*kd;
+    Send2Driver(out);
 }
 void Motor::Send2Driver(float V)
 {
