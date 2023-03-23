@@ -30,14 +30,14 @@ class Motor
         float RecognitionTime;
 
         //Val for PID
-        double error = 0;
-        double integral = 0;
-        double prev_error = 0;
-        double D = 0;
-        double kp = 0.75; // 0.75 0.5 0
-        double ki = 1;
-        double kd = 0 ;
-        double out = 0;
+        double error;
+        double integral;
+        double prev_error;
+        double D;
+        double kp; // 0.75 0.5 0
+        double ki;
+        double kd;
+        double out;
 
         //Val for filter
         float _err_measure;
