@@ -1,6 +1,6 @@
 #include "Arduino.h"
 #include "MotorLib.h"
-
+#include "Config.h"
 void Motor::init(int _FirstEncoder,int _SecondEncoder, int _PWMOut, int _RotOut1, int _RotOut2)
 {
     Timer  = millis();
@@ -8,7 +8,7 @@ void Motor::init(int _FirstEncoder,int _SecondEncoder, int _PWMOut, int _RotOut1
     FirstEncoder = _FirstEncoder;
     SecondEncoder = _SecondEncoder;
 
-    RecognitionTime = 20;
+    RecognitionTime = RecognitionTimeofEncoder;
 
     PWMOut = _PWMOut;
 
@@ -30,9 +30,9 @@ void Motor::init(int _FirstEncoder,int _SecondEncoder, int _PWMOut, int _RotOut1
     integral = 0;
     prev_error = 0;
     D = 0;
-    kp = 0.75; // 0.75 0.5 0
-    ki = 1;
-    kd = 0 ;
+    kp = KP; // 0.75 0.5 0
+    ki = KI;
+    kd = KD;
     out = 0;
 
     _err_measure = 5;
@@ -78,7 +78,7 @@ void Motor::calculateRotSpeed()
     {
         delta = count - count_prev;
         count_prev = count;
-        float Velocity_temp = delta * 1000 / RecognitionTime * 0.0285;
+        float Velocity_temp = delta * 1000 / RecognitionTime * RATIO;
         Velocity = simpleKalman(Velocity_temp);
         VelocityPID(GoalVelocity,Velocity);
     }
