@@ -54,5 +54,5 @@ class Motor
         void init(int FirstEncoder,int SecondEncoder, int PWMOut, int RotOut1, int RotOut2);
         void tick();
         void SetVolocity(float GoalVelocity);
-        float GetVelocity();
+        float GetRealVelocity();
 };
