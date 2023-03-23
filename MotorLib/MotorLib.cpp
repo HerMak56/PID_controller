@@ -1,9 +1,9 @@
 #include "Arduino.h"
 #include "MotorLib.h"
 #include "Config.h"
-void Motor::init(int _FirstEncoder,int _SecondEncoder, int _PWMOut, int _RotOut1, int _RotOut2)
+void Motor::init(int _FirstEncoder, int _SecondEncoder, int _PWMOut, int _RotOut1, int _RotOut2)
 {
-    Timer  = millis();
+    Timer = millis();
 
     FirstEncoder = _FirstEncoder;
     SecondEncoder = _SecondEncoder;
@@ -38,13 +38,13 @@ void Motor::init(int _FirstEncoder,int _SecondEncoder, int _PWMOut, int _RotOut1
     _err_measure = 5;
     _q = 0.20;
 
-    pinMode(RotOut1,OUTPUT);
-    pinMode(RotOut2,OUTPUT);
-    pinMode(FirstEncoder,INPUT_PULLUP);
-    pinMode(SecondEncoder,INPUT_PULLUP);
-    digitalWrite(RotOut1,LOW);
-    digitalWrite(RotOut2,LOW);
-    //attachInterrupt(digitalPinToInterrupt(FirstEncoder),FlagInterrupt,CHANGE);
+    pinMode(RotOut1, OUTPUT);
+    pinMode(RotOut2, OUTPUT);
+    pinMode(FirstEncoder, INPUT_PULLUP);
+    pinMode(SecondEncoder, INPUT_PULLUP);
+    digitalWrite(RotOut1, LOW);
+    digitalWrite(RotOut2, LOW);
+    // attachInterrupt(digitalPinToInterrupt(FirstEncoder),FlagInterrupt,CHANGE);
 }
 float Motor::GetRealVelocity()
 {
@@ -60,11 +60,11 @@ void Motor::Flag()
 }
 void Motor::tick()
 {
-    if(FlagInterrapt)
+    if (FlagInterrapt)
     {
         StateFirstEncoder = digitalRead(FirstEncoder);
         StateSecondEncoder = digitalRead(SecondEncoder);
-        if(StateFirstEncoder == StateSecondEncoder)
+        if (StateFirstEncoder == StateSecondEncoder)
             count++;
         else
             count--;
@@ -74,40 +74,41 @@ void Motor::tick()
 }
 void Motor::calculateRotSpeed()
 {
-    if(millis() - Timer >= RecognitionTime)
+    if (millis() - Timer >= RecognitionTime)
     {
         delta = count - count_prev;
         count_prev = count;
         float Velocity_temp = delta * 1000 / RecognitionTime * RATIO;
         Velocity = simpleKalman(Velocity_temp);
-        VelocityPID(GoalVelocity,Velocity);
+        VelocityPID(GoalVelocity, Velocity);
     }
 }
-float Motor::simpleKalman(float newVal) {
-  float _kalman_gain, _current_estimate;
-  static float _err_estimate = _err_measure;
-  static float _last_estimate;
-  _kalman_gain = (float)_err_estimate / (_err_estimate + _err_measure);
-  _current_estimate = _last_estimate + (float)_kalman_gain * (newVal - _last_estimate);
-  _err_estimate =  (1.0 - _kalman_gain) * _err_estimate + fabs(_last_estimate - _current_estimate) * _q;
-  _last_estimate = _current_estimate;
-  return _current_estimate;
+float Motor::simpleKalman(float newVal)
+{
+    float _kalman_gain, _current_estimate;
+    static float _err_estimate = _err_measure;
+    static float _last_estimate;
+    _kalman_gain = (float)_err_estimate / (_err_estimate + _err_measure);
+    _current_estimate = _last_estimate + (float)_kalman_gain * (newVal - _last_estimate);
+    _err_estimate = (1.0 - _kalman_gain) * _err_estimate + fabs(_last_estimate - _current_estimate) * _q;
+    _last_estimate = _current_estimate;
+    return _current_estimate;
 }
 void Motor::VelocityPID(float GoalVelocity, float Velocity)
 {
     error = GoalVelocity - Velocity;
-    integral = integral + error * RecognitionTime / 1000 *ki;
+    integral = integral + error * RecognitionTime / 1000 * ki;
     D = error * 1000 / RecognitionTime;
-    out = error*kp + integral + D*kd;
+    out = error * kp + integral + D * kd;
     Send2Driver(out);
 }
 void Motor::Send2Driver(float V)
 {
     int NewV = int(255 * abs(V) / 12);
     if (NewV > 255)
-    NewV = 255;
+        NewV = 255;
 
-    if (V > 0 )
+    if (V > 0)
     {
         digitalWrite(5, LOW);
         digitalWrite(6, HIGH);
@@ -117,10 +118,5 @@ void Motor::Send2Driver(float V)
         digitalWrite(5, HIGH);
         digitalWrite(6, LOW);
     }
-    else
-    {
-        digitalWrite(5, LOW);
-        digitalWrite(6, LOW);
-    }
-  analogWrite(PWMOut, NewV);
+    analogWrite(PWMOut, NewV);
 }
