@@ -54,7 +54,7 @@ void Motor::SetVolocity(float _GoalVelocity)
 {
     GoalVelocity = _GoalVelocity;
 }
-void Motor::FlagInterrupt()
+void Motor::Flag()
 {
     FlagInterrapt = true;
 }

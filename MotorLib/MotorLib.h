@@ -44,7 +44,6 @@ class Motor
         float _q;
 
 
-        void FlagInterrupt();
         void Send2Driver(float V);
         void tick();
         void calculateRotSpeed();
@@ -54,6 +53,7 @@ class Motor
         public:
 
         void init(int FirstEncoder,int SecondEncoder, int PWMOut, int RotOut1, int RotOut2);
+        void Flag();
         void tick();
         void SetVolocity(float GoalVelocity);
         float GetRealVelocity();
