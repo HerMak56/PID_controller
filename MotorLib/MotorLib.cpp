@@ -109,9 +109,9 @@ void Motor::VelocityPID(float GoalVelocity, float Velocity)
   D = error * 1000 / RecognitionTime;
   out = error * kp + integral + D * kd;
   Send2Driver3Pin(out);
-  Serial.print(GoalVelocity);
-  Serial.print(',');
-  Serial.println(Velocity);
+//  Serial.print(GoalVelocity);
+//  Serial.print(',');
+//  Serial.println(Velocity);
 }
 void Motor::Send2Driver2Pin(int Signal)
 {
@@ -133,19 +133,19 @@ void Motor::Send2Driver2Pin(int Signal)
 void Motor::Send2Driver3Pin(float V)
 {
   int NewV = abs(V);
-  if(NewV > 255)
-    NewV= 255;
-    
-  if(V > 0 )
+  if (NewV > 255)
+    NewV = 255;
+
+  if (V > 0 )
   {
-    digitalWrite(5,LOW);
-    digitalWrite(6,HIGH);
-    
+    digitalWrite(5, LOW);
+    digitalWrite(6, HIGH);
+
   }
   else if (V < 0)
   {
-    digitalWrite(5,HIGH);
-    digitalWrite(6,LOW);
+    digitalWrite(5, HIGH);
+    digitalWrite(6, LOW);
   }
-  analogWrite(PWMOut,NewV);
+  analogWrite(PWMOut, NewV);
 }

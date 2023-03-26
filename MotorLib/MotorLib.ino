@@ -10,7 +10,7 @@ void setup()
   Serial.begin(9600);
   A.init(Encoder1, Encoder2, PWM, in1, in2);
   attachInterrupt(digitalPinToInterrupt(Encoder1), FlagInter, CHANGE);
-  Serial.println("Goal, Real");
+  //Serial.println("Goal, Real");
 }
 void FlagInter()
 {
