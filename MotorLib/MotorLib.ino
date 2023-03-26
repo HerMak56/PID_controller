@@ -14,7 +14,6 @@ void setup()
 }
 void FlagInter()
 {
-  //Serial.println(1);
   A.Flag();
 }
 void loop()

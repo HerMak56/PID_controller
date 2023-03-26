@@ -109,9 +109,6 @@ void Motor::VelocityPID(float GoalVelocity, float Velocity)
   D = error * 1000 / RecognitionTime;
   out = error * kp + integral + D * kd;
   Send2Driver3Pin(out);
-//  Serial.print(GoalVelocity);
-//  Serial.print(',');
-//  Serial.println(Velocity);
 }
 void Motor::Send2Driver2Pin(int Signal)
 {
