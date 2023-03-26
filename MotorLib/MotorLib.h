@@ -2,7 +2,7 @@
 
 class Motor
 {
-private:
+public:
     // Val for pins
     int FirstEncoder;
     int SecondEncoder;
@@ -43,15 +43,16 @@ private:
     float _err_measure;
     float _q;
 
-    void Send2Driver(float V);
+    void Send2Driver2Pin(int Signal);
     void calculateRotSpeed();
     void VelocityPID(float GoalVelocity, float Velocity);
     float simpleKalman(float newVal);
 
-public:
+    int NewV;
     void init(int FirstEncoder, int SecondEncoder, int PWMOut, int RotOut1, int RotOut2);
     void Flag();
     void tick();
     void SetVolocity(float GoalVelocity);
     float GetRealVelocity();
+    void Send2Driver3Pin(float Signal);
 };

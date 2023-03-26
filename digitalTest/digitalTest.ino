@@ -80,6 +80,8 @@ void StatsFlag()
 
     First = digitalRead(2);
     Second = digitalRead(3);
+    //Serial.print(First);
+    //Serial.println(Second);
     if (First == Second)
     {
       count++;
@@ -88,9 +90,10 @@ void StatsFlag()
     else
     {
       count--;
-      //Serial.println(count);
+     // Serial.println(count);
     }
     Flag = false;
+    //Serial.println(count);
   }
 }
 void calculateRotSpeed()
@@ -104,7 +107,7 @@ void calculateRotSpeed()
     Velocity = simpleKalman(Velocity_temp);
     GoalVelocity = map(analogRead(A1), 0, 1024, -75, 75);
     VelocityPID(GoalVelocity, Velocity);
-    Serial.print(Velocity);
+    Serial.println(Velocity);
     Serial.print(',');
     Serial.println(GoalVelocity);
   }

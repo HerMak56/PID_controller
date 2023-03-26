@@ -3,5 +3,5 @@
     "port": "/dev/ttyUSB0",
     "programmer": "avrispmkii",
     "configuration": "cpu=atmega328old",
-    "sketch": "digitalTest/digitalTest.ino"
+    "sketch": "MotorLib/MotorLib.ino"
 }
